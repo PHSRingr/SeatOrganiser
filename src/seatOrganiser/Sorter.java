@@ -13,7 +13,7 @@ import org.apache.poi.ss.usermodel.Cell;
 
 public class Sorter {
 	
-	public static ArrayList<ArrayList<HSSFCell>> getSheetdata(String filename) throws IOException {
+	public static ArrayList<ArrayList<HSSFCell>> getSheetData(String filename) throws IOException {
     	
         // Make an ArrayList to store data
 
@@ -74,6 +74,7 @@ public class Sorter {
         }
     }
 	
+	@SuppressWarnings("unchecked")
 	public static void main(String args[]) throws Exception {
 		
 		String[][] room64 = new String[8][];
@@ -143,10 +144,10 @@ public class Sorter {
 		right[12] = new String[8];
 		right[13] = new String[8];
 		
-		ArrayList sheetExampleData = getSheetdata("Filemaker.xls");
+		ArrayList<ArrayList<HSSFCell>> sheetExampleData = getSheetData("Filemaker.xls");
 		printSheetData(sheetExampleData);
 		eliminate(sheetExampleData,false,true,false,false,9);
-		//printSheetData(sheetExampleData);
+		printSheetData(sheetExampleData);
 	}
 		
 	public static void eliminate(ArrayList<ArrayList<HSSFCell>> sheetData, boolean freshmenIn, boolean sophomoresIn, boolean juniorsIn, boolean seniorsIn, int period) {
@@ -155,7 +156,9 @@ public class Sorter {
         	ArrayList<HSSFCell> list = (ArrayList<HSSFCell>) sheetData.get(i);
         	
             for (int j = list.size() - 1; j >= 0; j--) {
-                int temp = (int) list.getNumericCellValue(j);
+                String temporary = list.get(j).toString();
+                int temp = 1; // ghetto placeholder
+                if (list.get(j).getCellType() == Cell.CELL_TYPE_NUMERIC) temp = Integer.parseInt(temporary);
                 if (j == 2 && temp != period) sheetData.remove(i);
                 if (j == 1) {
                 	if (!freshmenIn && temp == 9) sheetData.remove(i);
