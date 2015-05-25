@@ -13,7 +13,9 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 
 public class Sorter {
-	
+		
+	public String[][] room63;
+
 	public Sorter() {
 		
 		String[][] room64 = new String[8][];
@@ -84,7 +86,7 @@ public class Sorter {
 		right[13] = new String[8];
 	}
 	
-	public static ArrayList<ArrayList<HSSFCell>> getSheetData(String filename) throws IOException {
+	public static ArrayList<ArrayList<HSSFCell>> getSheetData(String filename, int period, boolean freshmen, boolean sophomores, boolean juniors, boolean seniors) throws IOException {
     	
         // Make an ArrayList to store data
 
@@ -97,7 +99,7 @@ public class Sorter {
             
             // Create an excel workbook
             
-            @SuppressWarnings("resource")
+			@SuppressWarnings("resource")
 			HSSFWorkbook workbook = new HSSFWorkbook(fis);
             
             // Call first sheet only
@@ -126,11 +128,16 @@ public class Sorter {
                 fis.close();
             }
         }
+        eliminatePeriod(sheetData, period);
+        eliminateFreshmen(sheetData, freshmen);
+        eliminateSophomores(sheetData, sophomores);
+        eliminateJuniors(sheetData, juniors);
+        eliminateSeniors(sheetData, seniors);
         return sheetData;
     }
 
     @SuppressWarnings("rawtypes")
-	private static void printSheetData(ArrayList sheetData) {
+	public static void printSheetData(ArrayList sheetData) {
         
         // Iterates the data and prints it out to the console.
         
@@ -146,20 +153,8 @@ public class Sorter {
             System.out.println("");
         }
     }
-	
-	public static void main(String args[]) throws Exception {
 		
-		ArrayList<ArrayList<HSSFCell>> sheetExampleData = getSheetData("Filemaker.xls");
-		//printSheetData(sheetExampleData);
-		
-		sheetExampleData = eliminatePeriod(sheetExampleData, 9);
-		eliminateFreshmen(sheetExampleData);
-		eliminateJuniors(sheetExampleData);
-		eliminateSeniors(sheetExampleData);
-		printSheetData(sheetExampleData);
-	}
-		
-	public static ArrayList<ArrayList<HSSFCell>> eliminatePeriod(ArrayList<ArrayList<HSSFCell>> sheetData, int period) {
+    private static ArrayList<ArrayList<HSSFCell>> eliminatePeriod(ArrayList<ArrayList<HSSFCell>> sheetData, int period) {
 		for (int i = sheetData.size() - 1; i >= 0; i--) {
 			
         	ArrayList<HSSFCell> list = (ArrayList<HSSFCell>) sheetData.get(i);
@@ -172,56 +167,64 @@ public class Sorter {
         } return sheetData;
 	}
 	
-	public static ArrayList<ArrayList<HSSFCell>> eliminateFreshmen(ArrayList<ArrayList<HSSFCell>> sheetData) {
-		for (int i = sheetData.size() - 1; i >= 0; i--) {
-			
-        	ArrayList<HSSFCell> list = (ArrayList<HSSFCell>) sheetData.get(i);
-        	
-            for (int j = list.size() - 1; j >= 0; j--) {
-            	int temp = 0;
-                if (j == 1) temp = Integer.parseInt(list.get(j).getStringCellValue());
-                if (j == 1 && temp == 9) sheetData.remove(i);
-            }
-        } return sheetData;
+	private static ArrayList<ArrayList<HSSFCell>> eliminateFreshmen(ArrayList<ArrayList<HSSFCell>> sheetData, boolean freshmen) {
+		if (freshmen) {
+			for (int i = sheetData.size() - 1; i >= 0; i--) {
+				
+	        	ArrayList<HSSFCell> list = (ArrayList<HSSFCell>) sheetData.get(i);
+	        	
+	            for (int j = list.size() - 1; j >= 0; j--) {
+	            	int temp = 0;
+	                if (j == 1) temp = Integer.parseInt(list.get(j).getStringCellValue());
+	                if (j == 1 && temp == 9) sheetData.remove(i);
+	            }
+	        }
+		} return sheetData;
 	}
 	
-	public static ArrayList<ArrayList<HSSFCell>> eliminateSophomores(ArrayList<ArrayList<HSSFCell>> sheetData) {
-		for (int i = sheetData.size() - 1; i >= 0; i--) {
-			
-        	ArrayList<HSSFCell> list = (ArrayList<HSSFCell>) sheetData.get(i);
-        	
-            for (int j = list.size() - 1; j >= 0; j--) {
-            	int temp = 0;
-                if (j == 1) temp = Integer.parseInt(list.get(j).getStringCellValue());
-                if (j == 1 && temp == 10) sheetData.remove(i);
-            }
-        } return sheetData;
+	private static ArrayList<ArrayList<HSSFCell>> eliminateSophomores(ArrayList<ArrayList<HSSFCell>> sheetData, boolean sophomores) {
+		if (sophomores) {
+			for (int i = sheetData.size() - 1; i >= 0; i--) {
+				
+	        	ArrayList<HSSFCell> list = (ArrayList<HSSFCell>) sheetData.get(i);
+	        	
+	            for (int j = list.size() - 1; j >= 0; j--) {
+	            	int temp = 0;
+	                if (j == 1) temp = Integer.parseInt(list.get(j).getStringCellValue());
+	                if (j == 1 && temp == 10) sheetData.remove(i);
+	            }
+	        } 
+		} return sheetData;
 	}
 	
-	public static ArrayList<ArrayList<HSSFCell>> eliminateJuniors(ArrayList<ArrayList<HSSFCell>> sheetData) {
-		for (int i = sheetData.size() - 1; i >= 0; i--) {
-			
-        	ArrayList<HSSFCell> list = (ArrayList<HSSFCell>) sheetData.get(i);
-        	
-            for (int j = list.size() - 1; j >= 0; j--) {
-            	int temp = 0;
-                if (j == 1) temp = Integer.parseInt(list.get(j).getStringCellValue());
-                if (j == 1 && temp == 11) sheetData.remove(i);
-            }
-        } return sheetData;
+	private static ArrayList<ArrayList<HSSFCell>> eliminateJuniors(ArrayList<ArrayList<HSSFCell>> sheetData, boolean juniors) {
+		if (juniors) {
+			for (int i = sheetData.size() - 1; i >= 0; i--) {
+				
+	        	ArrayList<HSSFCell> list = (ArrayList<HSSFCell>) sheetData.get(i);
+	        	
+	            for (int j = list.size() - 1; j >= 0; j--) {
+	            	int temp = 0;
+	                if (j == 1) temp = Integer.parseInt(list.get(j).getStringCellValue());
+	                if (j == 1 && temp == 11) sheetData.remove(i);
+	            }
+	        } 
+		} return sheetData;
 	}
 	
-	public static ArrayList<ArrayList<HSSFCell>> eliminateSeniors(ArrayList<ArrayList<HSSFCell>> sheetData) {
-		for (int i = sheetData.size() - 1; i >= 0; i--) {
-			
-        	ArrayList<HSSFCell> list = (ArrayList<HSSFCell>) sheetData.get(i);
-        	
-            for (int j = list.size() - 1; j >= 0; j--) {
-            	int temp = 0;
-                if (j == 1) temp = Integer.parseInt(list.get(j).getStringCellValue());
-                if (j == 1 && temp == 12) sheetData.remove(i);
-            }
-        } return sheetData;
+	private static ArrayList<ArrayList<HSSFCell>> eliminateSeniors(ArrayList<ArrayList<HSSFCell>> sheetData, boolean seniors) {
+		if (seniors) {
+			for (int i = sheetData.size() - 1; i >= 0; i--) {
+				
+	        	ArrayList<HSSFCell> list = (ArrayList<HSSFCell>) sheetData.get(i);
+	        	
+	            for (int j = list.size() - 1; j >= 0; j--) {
+	            	int temp = 0;
+	                if (j == 1) temp = Integer.parseInt(list.get(j).getStringCellValue());
+	                if (j == 1 && temp == 12) sheetData.remove(i);
+	            }
+	        }
+		} return sheetData;
 	}
 	
 	public static boolean multipleShowsNeeded(ArrayList<ArrayList<HSSFCell>> sheetData) {
