@@ -1,30 +1,12 @@
 package seatOrganiser;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.ss.usermodel.Cell;
 
-@SuppressWarnings("unused")
 public class Arranger {
-
-
-	public static void main(String[] args) throws IOException {
-    	ArrayList<ArrayList<HSSFCell>> firstShowStudents = Sorter.getSheetData("Filemaker.xls", 2, false, false, false, false);
-    	
-    	firstShowStudents = sortByTeacher(firstShowStudents);
-    	    	
-		ArrayList<ArrayList<HSSFCell>> secondShowStudents = new ArrayList<ArrayList<HSSFCell>>();
-		
-		breakIfTwo(firstShowStudents, secondShowStudents);
-		
-		firstShowStudents = newTogether(firstShowStudents);
-		
-		secondShowStudents = newTogether(secondShowStudents);
-	}
 	
 	@SuppressWarnings("unchecked")
 	public static ArrayList<ArrayList<HSSFCell>> sortByTeacher(ArrayList<ArrayList<HSSFCell>> sheetData) {
@@ -32,6 +14,16 @@ public class Arranger {
     	Collections.sort(sheetData, cc);
     	cc.setColumn(4);
     	Collections.sort(sheetData, cc);
+    	return sheetData;
+	}
+	
+	public static ArrayList<ArrayList<HSSFCell>> addTeachers(ArrayList<ArrayList<HSSFCell>> sheetData) {
+		boolean sketchy = false;
+		for(int i = 0; i <= sheetData.size()-1; i++) {
+			ArrayList<HSSFCell> list = sheetData.get(i);
+			if (i != sheetData.size() - 1 && list.get(4).getStringCellValue() != sheetData.get(i+1).get(4).getStringCellValue() && !sketchy) {sheetData.add(i, list); sketchy = true;}
+			else sketchy = false;
+		}
     	return sheetData;
 	}
 	
@@ -76,10 +68,9 @@ public class Arranger {
 		for(int i = sheetData.size()-1; i >= 0; i--) {
 			ArrayList<HSSFCell> list = sheetData.get(i);
 			if (isInteger(list.get(3).getStringCellValue())) {
-				if(Integer.parseInt(list.get(3).getStringCellValue()) > 100) {
+				if(Integer.parseInt(list.get(3).getStringCellValue()) > 100 || Integer.parseInt(list.get(3).getStringCellValue()) < 12) {
 					otherTemporary.add(list);
 					sheetData.remove(i);
-					i--;
 				}
 			}
 		}
@@ -91,18 +82,29 @@ public class Arranger {
 		
 		for(int i = 0; i < sheetData.size(); i++) {
 			ArrayList<HSSFCell> list = sheetData.get(i);
-			if (isInteger(list.get(3).getStringCellValue())) {
-				if(Integer.parseInt(list.get(3).getStringCellValue()) > 100) {
-					sheetData.remove(i);
-					i--;
-				}
-			}
-		}
-		for(int i = 0; i < sheetData.size(); i++) {
-			ArrayList<HSSFCell> list = sheetData.get(i);
 			temporary.add(list);
 		}
 		
 		return temporary;
 	}
+	
+	public static ArrayList<ArrayList<HSSFCell>> loudToBack(ArrayList<ArrayList<HSSFCell>> sheetData, List<String> items) {
+		ArrayList<ArrayList<HSSFCell>> temporary = new ArrayList<ArrayList<HSSFCell>>();
+		for (int i = items.size() - 1; i >= 0; i--) {
+			for (int j = sheetData.size() - 1; j >= 0; j--) {
+				ArrayList<HSSFCell> list = sheetData.get(j);
+				if (list.get(4).getRichStringCellValue().getString().trim().equals(items.get(i))) {
+					temporary.add(list);
+					sheetData.remove(j);
+				}
+			}
+		}
+		for (int i = 0; i < temporary.size(); i++) {
+			sheetData.add(temporary.get(i));
+		}
+		return sheetData;
+	}
+	
+	
 }
+
