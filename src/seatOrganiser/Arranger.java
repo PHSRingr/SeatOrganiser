@@ -99,12 +99,10 @@ public class Arranger {
 				}
 			}
 		}
-		for (int i = 0; i < temporary.size(); i++) {
-			sheetData.add(temporary.get(i));
-		}
-		return sheetData;
+		ArrayList<ArrayList<HSSFCell>> merged = new ArrayList<ArrayList<HSSFCell>>(sheetData);
+		merged.addAll(temporary);
+		Sorter.printSheetData(temporary);
+		return merged;
 	}
-	
-	
 }
 
