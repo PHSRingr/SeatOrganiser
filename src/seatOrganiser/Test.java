@@ -18,6 +18,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JTextPane;
@@ -220,9 +221,11 @@ public class Test extends JFrame implements ActionListener {
         contentPane.add(lblNameOfSoftware);
         
         // BC THIS IS ORIGINAL
-        JLabel lblRingrInc = new JLabel("\u00A9 Ringr Inc, 2015");
+        JLabel lblRingrInc = new JLabel("Ringr Inc, 2015");
         lblRingrInc.setBounds(207, 321, 100, 14);
         contentPane.add(lblRingrInc);
+        
+
     }
     public void actionPerformed(ActionEvent e) {
     	List<String> items = new ArrayList<String>();
@@ -283,30 +286,117 @@ public class Test extends JFrame implements ActionListener {
     		period = 9;
     	}
     	
-    	if (e.getSource() == jtfText1_1) {
+    	if (e.getSource() == btnGenerate) {
     		newarr = e.getActionCommand();// e.getActionCommand() is the text that is entered
     		items = Arrays.asList(newarr.split("\\s*,\\s*"));
-    		System.out.println(items);
-    	}
-    	
-    	if (e.getSource() == btnGenerate) {
     		ArrayList<ArrayList<HSSFCell>> sheetData = null;
 			try {
 				sheetData = Sorter.getSheetData("Filemaker.xls", period, freshmen, sophomores, juniors, seniors);
 			} catch (IOException e1) {}
     		sheetData = Arranger.sortByTeacher(sheetData);
     		sheetData = Arranger.addTeachers(sheetData);
-    		sheetData = Arranger.newTogether(sheetData);
-    		sheetData = Arranger.loudToBack(sheetData, items);
     		ArrayList<ArrayList<HSSFCell>> secondShowStudents = new ArrayList<ArrayList<HSSFCell>>();
     		Arranger.breakIfTwo(sheetData, secondShowStudents);
-    		String[][][] array3d = Converter.displayNicely(sheetData);
+    		sheetData = Arranger.newTogether(sheetData);
+    		secondShowStudents = Arranger.newTogether(secondShowStudents);
+    		sheetData = Arranger.loudToBack(sheetData, items);
+    		secondShowStudents = Arranger.loudToBack(secondShowStudents, items);
+    		
+    		String[][][] array3d = Converter.displayShortNicely(sheetData);
+    		if(Sorter.openBackDoors(sheetData)) {array3d = new String[3][][]; array3d = Converter.displayNicely(sheetData);}
     		array3d = Converter.cleanUp(array3d);
-    		System.out.println(Converter.toStr(array3d[0]));
-    		System.out.println(Converter.toStr(array3d[1]));
-    		System.out.println(Converter.toStr(array3d[2]));
-    		if(Sorter.openBackDoors(sheetData)) System.out.println(Converter.toStr(array3d[3]));
-    		if(Sorter.openBackDoors(sheetData)) System.out.println(Converter.toStr(array3d[4]));
+    		
+            if(Sorter.openBackDoors(sheetData)){
+            	JTextArea left = new JTextArea(Converter.toStr(array3d[0]));
+                left.setBounds(10, 340, 200, 240);
+                contentPane.add(left);
+                
+            	JTextArea room64 = new JTextArea(Converter.toStr(array3d[1]));
+            	room64.setBounds(10, 590, 200, 130);
+	            contentPane.add(room64);
+	            
+	            JTextArea middle = new JTextArea(Converter.toStr(array3d[2]));
+	            middle.setBounds(220, 340, 200, 240);
+	            contentPane.add(middle);
+	            
+	            JTextArea right = new JTextArea(Converter.toStr(array3d[3]));
+	            right.setBounds(430, 340, 200, 240);
+	            contentPane.add(right);
+	            
+	            JTextArea room63 = new JTextArea(Converter.toStr(array3d[4]));
+	            room63.setBounds(430, 590, 200, 120);
+	            contentPane.add(room63);
+            }
+            
+            else {
+            	JTextArea left = new JTextArea(Converter.toStr(array3d[0]));
+                left.setBounds(10, 340, 200, 240);
+                contentPane.add(left);
+            	
+	            JTextArea middle = new JTextArea(Converter.toStr(array3d[1]));
+	            middle.setBounds(220, 340, 200, 240);
+	            contentPane.add(middle);
+	            
+	            JTextArea right = new JTextArea(Converter.toStr(array3d[2]));
+	            right.setBounds(430, 340, 200, 240);
+	            contentPane.add(right);
+	            
+	            JTextArea room63 = new JTextArea("[Wing Closed]");
+	            room63.setBounds(430, 590, 200, 120);
+	            contentPane.add(room63);
+	            
+	            JTextArea room64 = new JTextArea("[Wing Closed]");
+            	room64.setBounds(10, 590, 200, 130);
+	            contentPane.add(room64);
+            }
+
+    		String[][][] array3d2 = Converter.displayShortNicely(secondShowStudents);
+    		if(Sorter.openBackDoors(secondShowStudents) /*&& Sorter.multipleShowsNeeded(sheetData)*/) {array3d2 = new String[3][][]; array3d2 = Converter.displayNicely(secondShowStudents);}
+    		array3d2 = Converter.cleanUp(array3d2);
+            
+            if(Sorter.openBackDoors(secondShowStudents)){
+            	JTextArea left2 = new JTextArea(Converter.toStr(array3d2[0]));
+                left2.setBounds(640, 340, 200, 240);
+                contentPane.add(left2);
+                
+            	JTextArea room642 = new JTextArea(Converter.toStr(array3d2[1]));
+            	room642.setBounds(640, 590, 200, 130);
+	            contentPane.add(room642);
+	            
+	            JTextArea middle2 = new JTextArea(Converter.toStr(array3d2[2]));
+	            middle2.setBounds(850, 340, 200, 240);
+	            contentPane.add(middle2);
+	            
+	            JTextArea right2 = new JTextArea(Converter.toStr(array3d2[3]));
+	            right2.setBounds(1060, 340, 200, 240);
+	            contentPane.add(right2);
+	            
+	            JTextArea room632 = new JTextArea(Converter.toStr(array3d2[4]));
+	            room632.setBounds(1060, 590, 200, 120);
+	            contentPane.add(room632);
+            }
+            
+            else {
+            	JTextArea left2 = new JTextArea(Converter.toStr(array3d2[0]));
+                left2.setBounds(640, 340, 200, 240);
+                contentPane.add(left2);
+            	
+	            JTextArea middle2 = new JTextArea(Converter.toStr(array3d2[1]));
+	            middle2.setBounds(850, 340, 200, 240);
+	            contentPane.add(middle2);
+	            
+	            JTextArea right2 = new JTextArea(Converter.toStr(array3d2[2]));
+	            right2.setBounds(1060, 340, 200, 240);
+	            contentPane.add(right2);
+	            
+	            JTextArea room632 = new JTextArea("[Wing Closed]");
+	            room632.setBounds(1060, 590, 200, 120);
+	            contentPane.add(room632);
+	            
+            	JTextArea room642 = new JTextArea("[Wing Closed]");
+            	room642.setBounds(640, 590, 200, 130);
+	            contentPane.add(room642);
+            }
     	}
     	
     }
