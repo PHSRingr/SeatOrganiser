@@ -25,6 +25,8 @@ import java.util.List;
  *  - a List
  *  - an Array
  */
+
+@SuppressWarnings("rawtypes")
 public class ColumnComparator implements Comparator
 {
 	private int column;
