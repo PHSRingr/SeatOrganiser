@@ -101,7 +101,6 @@ public class Arranger {
 		}
 		ArrayList<ArrayList<HSSFCell>> merged = new ArrayList<ArrayList<HSSFCell>>(sheetData);
 		merged.addAll(temporary);
-		Sorter.printSheetData(temporary);
 		return merged;
 	}
 }
