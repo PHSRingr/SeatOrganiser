@@ -287,7 +287,7 @@ public class Test extends JFrame implements ActionListener {
     	}
     	
     	if (e.getSource() == btnGenerate) {
-    		newarr = e.getActionCommand();// e.getActionCommand() is the text that is entered
+    		newarr = jtfText1_1.getText(); // e.getActionCommand() is the text that is entered
     		items = Arrays.asList(newarr.split("\\s*,\\s*"));
     		ArrayList<ArrayList<HSSFCell>> sheetData = null;
 			try {
@@ -351,7 +351,7 @@ public class Test extends JFrame implements ActionListener {
             }
 
     		String[][][] array3d2 = Converter.displayShortNicely(secondShowStudents);
-    		if(Sorter.openBackDoors(secondShowStudents) /*&& Sorter.multipleShowsNeeded(sheetData)*/) {array3d2 = new String[3][][]; array3d2 = Converter.displayNicely(secondShowStudents);}
+    		if(Sorter.openBackDoors(secondShowStudents)) {array3d2 = new String[3][][]; array3d2 = Converter.displayNicely(secondShowStudents);}
     		array3d2 = Converter.cleanUp(array3d2);
             
             if(Sorter.openBackDoors(secondShowStudents)){
